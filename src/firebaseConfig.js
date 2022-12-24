@@ -38,7 +38,7 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 // Dejo referencia a la coleccion
-const favRef = collection(db, 'favoritos')
+export const favRef = collection(db, 'favoritos')
 
 // Agregar Favs a la coleccion
 export const saveFav = (email, movieId) => {
@@ -54,21 +54,28 @@ export const getFav =  () => {
     snapshot.docs.forEach((doc)=>{
       favoritos.push({ ...doc.data(), id:doc.id})
     })
-    console.log(favoritos)
+    //  console.log(favoritos)
+    
+   })
+   .catch(err =>{
+    console.log(err.message)
    })
   console.log("llego desde firebaseconfig");
-  return;
+  
 };
 
 //Obtener FAvs por email de usuario
 // query
-const q = query(favRef, where("email", "==", 'h_berru@hotmail.com'));
+export const q = query(favRef, where("email", "==", 'h_berru@hotmail.com'));
 
 // 
-export const getFavByEmail = async () => {
-  await getDocs(q);
-  getFavByEmail.forEach(doc => {
-    console.log(doc.email, ' => ', doc.data())
-  });
+export const getFavByEmail =  () => {
+    getDocs(q)
+      .then((snapshot)=>{
+          let favByEmail = [];
+          snapshot.docs.forEach((doc)=>{
+            favByEmail.push({ ...doc.data(), id:doc.id})
+          })
+          console.log(favByEmail)
+          })
 };
-

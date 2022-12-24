@@ -9,6 +9,7 @@ export function MovieCard({ movie }) {
   const imageUrl = "https://image.tmdb.org/t/p/w300" + movie.poster_path;
   const {saveLogin} = useLoginContext();
   
+  let logActve='heartLike';
   
   const handleClick = ()=> {
     // {saveLogin? alert('Estas logueado ' + movie.id): alert('No estas logueado')} 
@@ -29,7 +30,9 @@ export function MovieCard({ movie }) {
          
           <div className ='favButtons'>
         
-        <button onClick={handleClick}><div className='heart'></div></button>
+        <button onClick={handleClick}>
+
+        <div className='heart'></div></button>
       
        
     
