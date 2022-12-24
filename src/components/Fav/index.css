@@ -1,0 +1,48 @@
+.favButtons {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    
+}
+.heart{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+
+    background: rgb(251, 251, 251);
+    height: 20px;
+    width: 20px;
+    transform: rotate(-45deg);
+    
+}
+.heart::before,
+.heart::after{
+    content:"";
+    background: rgb(253, 253, 253);
+    border-radius: 50%;
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    
+}
+.heart::before{
+top:-10px;
+left: 0;
+
+}
+.heart:after{
+    left: 10px;
+    top:0;
+}
+.heartLike{
+    background: rgb(252, 1, 1);
+}
+.heartLike::before,
+.heartLike::after{
+    content:"";
+    background: rgb(252, 1, 1);
+}
+/* @keyframes pulse{
+75%
+} */
