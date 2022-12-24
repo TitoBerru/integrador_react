@@ -13,6 +13,10 @@ const headerNav = [
       display: 'Movies',
       path: '/movie'
   }
+  {
+      display: 'favoritos',
+      path: '/favoritos'
+  }
 ];
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
