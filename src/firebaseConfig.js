@@ -1,50 +1,74 @@
-  // Import the functions you need from the SDKs you need
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
-  getFirestore, 
-  collection, 
+  getFirestore,
+  collection,
   addDoc,
   getDocs,
-  doc
+  doc,
+  query,
+  where,
+  QuerySnapshot,
 } from "firebase/firestore";
-import {getAuth} from "firebase/auth"
+import { getAuth } from "firebase/auth";
 //import { getAnalytics } from "firebase/analytics";
 
-import 'firebase/firestore';
+import "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyByvz0bRGVQkU4YCCjQpZ_J3Y2_VWywH3U',
-  authDomain: 'bd-infopelis.firebaseapp.com',
-  projectId: 'bd-infopelis',
-  storageBucket: 'bd-infopelis.appspot.com',
-  messagingSenderId: '647398341537',
-  appId: '1:647398341537:web:3bd4243b11181141ff29e0',
-  measurementId: 'G-2VJSKLMYFF',
+  apiKey: "AIzaSyByvz0bRGVQkU4YCCjQpZ_J3Y2_VWywH3U",
+  authDomain: "bd-infopelis.firebaseapp.com",
+  projectId: "bd-infopelis",
+  storageBucket: "bd-infopelis.appspot.com",
+  messagingSenderId: "647398341537",
+  appId: "1:647398341537:web:3bd4243b11181141ff29e0",
+  measurementId: "G-2VJSKLMYFF",
 };
 
-// Initialize Firebase  
-const app =initializeApp(firebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
 
-export const db = getFirestore(app); 
+export const db = getFirestore(app);
 
-export const auth = getAuth(app)
+export const auth = getAuth(app);
 
-export const saveFav = (email, movieId) =>{
+// Dejo referencia a la coleccion
+const favRef = collection(db, 'favoritos')
+
+// Agregar Favs a la coleccion
+export const saveFav = (email, movieId) => {
   // console.log(email, movieId)
-  addDoc(collection(db, 'favoritos'), {email, movieId})
+  addDoc(favRef, { email, movieId });
 };
 
-export const getFav = async () => {
- await getDocs(collection(db, 'favoritos'));
-  console.log('llego desde firebaseconfig');
+//Obtener todos los favoritos
+export const getFav =  () => {
+   getDocs(favRef)
+   .then((snapshot)=>{
+    let favoritos = [];
+    snapshot.docs.forEach((doc)=>{
+      favoritos.push({ ...doc.data(), id:doc.id})
+    })
+    console.log(favoritos)
+   })
+  console.log("llego desde firebaseconfig");
   return;
- 
-}
+};
 
+//Obtener FAvs por email de usuario
+// query
+const q = query(favRef, where("email", "==", 'h_berru@hotmail.com'));
 
-  
+// 
+export const getFavByEmail = async () => {
+  await getDocs(q);
+  getFavByEmail.forEach(doc => {
+    console.log(doc.email, ' => ', doc.data())
+  });
+};
+

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./MovieCard.module.css";
-import { saveFav, getFav } from "../../firebaseConfig";
+import { saveFav } from "../../firebaseConfig";
 import {useLoginContext} from '../../UserProvider';
 import Fav from "../Fav";
 

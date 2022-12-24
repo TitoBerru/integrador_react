@@ -19,6 +19,7 @@ export function TmdbApiContextProvider(props) {
   const [comedyMovies, setComedyMovies] = useState([]);
   const [actionMovies, setActionMovies] = useState([]);
   const [netflixOriginals, setNetflixOriginals] = useState([]);
+  const [favouriteMovies, setFavouriteMovies] = useState([]);
 
   useEffect(() => {
     setMoviesTrending(tmdbApi.getTrending());
@@ -54,6 +55,8 @@ export function TmdbApiContextProvider(props) {
     comedyMovies,
     actionMovies,
     netflixOriginals,
+    favouriteMovies,
+    setFavouriteMovies,
   };
 
   return (
