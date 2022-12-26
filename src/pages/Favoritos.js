@@ -7,9 +7,13 @@ import { getFavByEmail, favEmail } from "../firebaseConfig";
 import { favRef, q } from "../firebaseConfig";
 import { getDocs, query, where } from "firebase/firestore";
 
-const Favoritos = () => {
-   const allFavs = getFav();
+//guardo usuario
 
+
+const Favoritos = () => {
+  //  const allFavs = getFav();
+   const {saveLogin} = useLoginContext();
+    console.log(saveLogin);
   // todos los favoritos -- FUNCIONA
 //   const allFavs = () => {
 //     getDocs(favRef).then((snapshot) => {
@@ -22,22 +26,33 @@ const Favoritos = () => {
 //   };
 
   // favoritos por email
-//   const q = query(favRef, where("email", "==", 'h_berru@hotmail.com'));
+  const q = query(favRef, where("email", "==", saveLogin));
 
-// // 
-//         const getFavByEmail = () => {
-//             getDocs(q);
-//             getFavByEmail.forEach(doc => {
-//             console.log(doc.email, ' => ', doc.data())
-//   });
-//         }
-      const favsByEmail = getFavByEmail();
+// 
+ const GetFavByEmail =  () => {
+  const {saveLogin} = useLoginContext();
+  console.log(saveLogin);
+  
+  getDocs(q)
+    .then((snapshot)=>{
+        let favByEmail = [];
+        snapshot.docs.forEach((doc)=>{
+          favByEmail.push({ ...doc.data(), id:doc.id})
+        })
+        console.log(favByEmail)
+        })
+};
+
+//intento directo, pero me da undefined
+      //const favsByEmail = getFavByEmail();
 
   return (
     <div>
       {/* {console.log(favsByEmail)} */}
-      {favsByEmail()}
-      <h1>HOLA DESDE FAVORITOS</h1>
+      {/* {console.log(favsByEmail)}
+      {favsByEmail} */}
+      
+      {GetFavByEmail()}
     </div>
   );
 };

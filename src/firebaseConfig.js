@@ -70,12 +70,13 @@ export const q = query(favRef, where("email", "==", 'h_berru@hotmail.com'));
 
 // 
 export const getFavByEmail =  () => {
+  
     getDocs(q)
       .then((snapshot)=>{
           let favByEmail = [];
           snapshot.docs.forEach((doc)=>{
             favByEmail.push({ ...doc.data(), id:doc.id})
           })
-          console.log(favByEmail)
+          // console.log(favByEmail)
           })
 };
