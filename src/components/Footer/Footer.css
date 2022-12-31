@@ -6,11 +6,8 @@
   background-size: contain;
   background-repeat:repeat-x;
   width: 100vw;
-  position: absolute;
+  position: relative;
   bottom: 0;
-  height: 25vh;
-
-    
 }
 .logo-emovies{
   width: auto;

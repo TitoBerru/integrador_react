@@ -1,46 +1,87 @@
 import { Link } from "react-router-dom";
 import styles from "./MovieCard.module.css";
-import { getFavByEmail, saveFav } from "../../firebaseConfig";
+//import for Favs
+import { saveFav } from "../../firebaseConfig";
 import { useLoginContext } from "../../UserProvider";
-import Fav from "../Fav";
-import Favoritos from "../../pages/Favoritos";
+// import Fav from "../Fav";
+import React, { useContext } from "react";
+import { Favcontext } from "../../contexts/favContext";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
-export function MovieCard({ movie }) {
+//funcion que trae el poster y titulo de la pelicula dentro de la card
+export function MovieCard({ movie, notTitle }) {
   const imageUrl = "https://image.tmdb.org/t/p/w300" + movie.poster_path;
+  //Constantes y funciones para Favs
   const { saveLogin } = useLoginContext();
-  // let favoritos = getFavByEmail('inicio1@inicio1.com');
-  // console.log(favoritos)
+  const contexData = useContext(Favcontext);
+  const [stateFav, setStateFav] = useState(false);
+  const [classNameState, setClassNameState] = useState(false);
+  
+  function changeFavStatus() {
+    setClassNameState(!classNameState);
+  }
+
+  function addFav  ()  {
+      //Cambio de estado que funciona ok
+    setStateFav(!stateFav);  
+  };
+  
+  function adFavsInLogin(){
+    {contexData.map((peli) =>{
+      if(movie.id == peli.movieId){
+        console.log(movie.id, peli.movieId)
+        changeFavStatus ()
+      } else{
+        console.log('no llego desde adfavsinlogin')
+      }
+      
+    } )}
+  }
 
   const handleClick = () => {
-    // {saveLogin? alert('Estas logueado ' + movie.id): alert('No estas logueado')}
-    // alert(movie.id)
     if (!saveLogin) {
-      alert("Debes estar logueado para guardar este favorito");
+      Swal.fire("Debes hacer login para guardar el favorito");
     } else {
-      saveFav(saveLogin, movie.id);
-      {
+     
+      adFavsInLogin();
+      let data = JSON.stringify(contexData); // Extraigo la info de los favoritos por el contexData
+      // console.log(contexData)
+      let id = movie.id; // adquiero el id de la movie renderizada
+      // console.log('el id de  la movie que guarde desde MovieCard, es el '+ id);
+      // console.log('la data que guarde desde MovieCard, es el '+ data);
+      // ademas hay que cambiar el estado de addfav a true.
+      let favExist = data.includes(id); // con esto se valida que el json incluya el id de la peli clickeada
+      // addFav();
+      if(favExist){
+        changeFavStatus ()
+        console.log('Ya existe, deberia borrar el registro' )
+      } else {
+        saveFav(saveLogin, movie.id); //Guarda el email y la movieId en la BD
+        addFav()
+        changeFavStatus()
+        console.log('Guarde el registro' )
       }
-      console.log(
-        "se guardo en la base con el usuario" +
-          saveLogin +
-          " y con el id de movie: " +
-          movie.id
-      );
+      
     }
   };
-  return (
-    <div>
-      <Favoritos />
-    <li className={styles.movieCard}>    
-      <Link to={"/movies/" + movie.id}>
-       
-        <div className="favButtons">
-          <button onClick={handleClick}>
-            {saveLogin? <div className="heartLike"></div>: <div className="heart"></div>}
-            {/* <div className="heart"></div> */}
-          </button>
-        </div>
 
+  return (
+    <li className={styles.movieCard}>
+      
+        {/* Favs */}
+        
+        <div className="favButtons">
+            <button className ='button'onClick={handleClick}>
+              {console.log(movie.id)}
+              {/* {console.log(contexData)} */}
+              {/* Intento Mapear */}
+              {adFavsInLogin}
+              <div className={classNameState? 'heartLike' :'heart'}></div>
+            </button>
+          </div>
+        {/* Termina Favs */}
+        <Link to={'/movies/' + movie.id}>
         <img
           width={230}
           height={345}
@@ -48,9 +89,8 @@ export function MovieCard({ movie }) {
           src={imageUrl}
           alt={movie.title}
         />
-        <div>{movie.title}</div>
+        {!notTitle && <div className={styles.title}>{movie.title}</div>}
       </Link>
     </li>
-    </div>
   );
 }
